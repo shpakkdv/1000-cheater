@@ -1,0 +1,11 @@
+{
+  "files": {
+    "main.css": "/1000-cheater/static/css/main.9c1e21b6.css",
+    "main.js": "/1000-cheater/static/js/main.90ad4606.js",
+    "index.html": "/1000-cheater/index.html"
+  },
+  "entrypoints": [
+    "static/css/main.9c1e21b6.css",
+    "static/js/main.90ad4606.js"
+  ]
+}
