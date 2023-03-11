@@ -1,6 +1,11 @@
 .counter {
   display: flex;
   align-items: center;
+
+  input[type='checkbox'] {
+    margin: 0;
+    cursor: pointer;
+  }
 }
 
 .player {
@@ -27,16 +32,22 @@
 }
 
 .checkboxContainer {
-  input {
-    margin: 0;
-    cursor: pointer;
-  }
+  display: flex;
 }
 
 .suitLabel {
   padding: 0 12px 0 7px;
   margin-right: 7px;
   cursor: pointer;
+}
+
+.aceCheckbox {
+  margin-top: 10px;
+
+  label {
+    padding-left: 7px;
+    cursor: pointer;
+  }
 }
 
 @media screen and (max-width: 740px) {

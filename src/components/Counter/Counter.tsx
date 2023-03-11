@@ -1,3 +1,4 @@
+import cn from "classnames";
 import { type FC, useCallback, useEffect, useState } from "react";
 
 import { RANKS, SUITS, EmojiBySuit, SETTINGS_STORAGE_KEY } from "const";
@@ -19,24 +20,24 @@ const DefaultPlayerNameByKey: PlayerNames = {
   "pl2": "Player 2",
 };
 
-const DefaultCounterText = "Choose at least 7 cards."
-
 interface SettingsStorage {
   checkedSuits: CheckedSuits;
   playerNames: PlayerNames;
   minimumPossiblePoints: string;
+  withAceMarriage: boolean;
 }
 
 interface CounterProps {
   chosenCards: ChosenCards;
-  chosenCardsNumber: number;
+  handCards: ChosenCards;
 }
 
-export const Counter: FC<CounterProps> = ({ chosenCards, chosenCardsNumber }) => {
+export const Counter: FC<CounterProps> = ({ chosenCards, handCards }) => {
   const [checkedSuits, setCheckedSuits] = useState<CheckedSuits>({});
   const [playerNames, setPlayerName] = useState<PlayerNames>(DefaultPlayerNameByKey);
   const [activeInput, setActiveInput] = useState<PlayerKey | null>(null);
-  const [minimumPossiblePoints, setMinimumPossiblePoints] = useState(DefaultCounterText);
+  const [withAceMarriage, setWithAceMarriage] = useState(true);
+  const [minimumPossiblePoints, setMinimumPossiblePoints] = useState("");
 
   const resetActiveInput = useCallback(() => setActiveInput(null), []);
   const onKeyDown = useCallback<React.KeyboardEventHandler<HTMLInputElement>>((event) => {
@@ -68,6 +69,10 @@ export const Counter: FC<CounterProps> = ({ chosenCards, chosenCardsNumber }) =>
 
       return newCheckedSuits;
     });
+  }, []);
+
+  const onWithAceMarriageChange = useCallback(() => {
+    setWithAceMarriage(withAceMarriage => !withAceMarriage);
   }, []);
 
   // auto-detection used suits
@@ -117,19 +122,8 @@ export const Counter: FC<CounterProps> = ({ chosenCards, chosenCardsNumber }) =>
 
   // auto-calculation of points
   useEffect(() => {
-    if (chosenCardsNumber > 8) {
-      return;
-    }
-
-    if (chosenCardsNumber < 7) {
-      setMinimumPossiblePoints(DefaultCounterText);
-
-      return;
-    }
-
-    // the calculation is correct only for 7 and 8 cards
-    setMinimumPossiblePoints(calculateMinimumPossiblePoints(chosenCards));
-  }, [chosenCards, chosenCardsNumber]);
+    setMinimumPossiblePoints(calculateMinimumPossiblePoints(handCards, withAceMarriage));
+  }, [handCards, withAceMarriage]);
 
 
   const restoreData = useCallback((storage: SettingsStorage) => {
@@ -144,6 +138,7 @@ export const Counter: FC<CounterProps> = ({ chosenCards, chosenCardsNumber }) =>
     playerNames,
     checkedSuits,
     minimumPossiblePoints,
+    withAceMarriage,
   };
 
   useLocalStorage(restoreData, storageSettingsObject, SETTINGS_STORAGE_KEY);
@@ -195,7 +190,18 @@ export const Counter: FC<CounterProps> = ({ chosenCards, chosenCardsNumber }) =>
         ))}
       </div>
 
-      <div className={styles.total} dangerouslySetInnerHTML={{ __html: `<b>Points:</b> ${minimumPossiblePoints}` }} />
+      <div className={styles.total}>
+        <div dangerouslySetInnerHTML={{ __html: `<b>Points:</b> ${minimumPossiblePoints}` }} />
+        <div className={cn(styles.checkboxContainer, styles.aceCheckbox)}>
+          <input
+            type="checkbox"
+            id="ace_marriage"
+            checked={withAceMarriage}
+            onChange={onWithAceMarriageChange}
+          />
+          <label htmlFor="ace_marriage">With Ace marriage</label>
+        </div>
+      </div>
     </div>
   );
 };

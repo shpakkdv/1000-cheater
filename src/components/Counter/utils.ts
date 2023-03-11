@@ -28,7 +28,7 @@ export function calculateChosenCardsNumber(chosenCards: ChosenCards): number {
  * Supposed to work completely correctly only with 8 chosen cards.
  * But can be used to predict points for 7 cards as well.
  */
-export function calculateMinimumPossiblePoints(chosenCards: ChosenCards): string {
+export function calculateMinimumPossiblePoints(chosenCards: ChosenCards, withAceMarriage: boolean): string {
   let sum = 0;
   let unaccountedCardsCount = 0;
   let movesCount = 0;
@@ -146,7 +146,7 @@ export function calculateMinimumPossiblePoints(chosenCards: ChosenCards): string
   });
 
   // marriage on the latest move
-  if (movesCount > 1 && movesCount < 8) {
+  if (movesCount > 0 && movesCount < 8) {
     // find the biggest marriage that there is in the hands but not used
     const unusedBiggestMarriage = SUITS.find(suit => marriage[suit][0] && !marriage[suit][1])
 
@@ -156,9 +156,7 @@ export function calculateMinimumPossiblePoints(chosenCards: ChosenCards): string
     }
   }
 
-  // TODO: add a checkbox to disable Ace marriage
-
-  if (checkAceMarriage(chosenCards)) {
+  if (withAceMarriage && checkAceMarriage(chosenCards)) {
     sum += SuitValue.A;
     // TODO: change emoji
     result += ` + ${SuitValue.A} ${wrapEmoji("🃏")}`;

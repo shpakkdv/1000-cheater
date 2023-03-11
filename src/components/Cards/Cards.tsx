@@ -13,13 +13,13 @@ import styles from './Cards.module.scss';
 
 interface CardsStorage {
   chosenCards: ChosenCards;
-  myHand: ChosenCards;
+  handCards: ChosenCards;
 }
 
 export const Cards: FC = () => {
   const [chosenCards, setChosenCards] = useState<ChosenCards>({});
   const [chosenCardsNumber, setChosenCardsNumber] = useState(0);
-  const [myHand, setMyHand] = useState<ChosenCards>({});
+  const [handCards, setHandCards] = useState<ChosenCards>({});
 
   const onCardClick = useCallback((card: Card) => {
     if (chosenCards[card]) {
@@ -42,21 +42,21 @@ export const Cards: FC = () => {
 
   // Save the first 8 chosen cards as "my hand"
   useEffect(() => {
-    if (calculateChosenCardsNumber(chosenCards) < 8) {
-      setMyHand({ ...chosenCards });
+    if (calculateChosenCardsNumber(chosenCards) <= 8) {
+      setHandCards({ ...chosenCards });
     }
   }, [chosenCards]);
 
   const restoreData = useCallback((storage: CardsStorage) => {
-    const { chosenCards, myHand } = storage;
+    const { chosenCards, handCards } = storage;
 
     setChosenCards(chosenCards);
-    setMyHand(myHand);
+    setHandCards(handCards);
   }, []);
 
   const cardsSettingsObject: CardsStorage = {
     chosenCards,
-    myHand,
+    handCards,
   };
 
   useLocalStorage(restoreData, cardsSettingsObject, CARDS_STORAGE_KEY);
@@ -81,7 +81,7 @@ export const Cards: FC = () => {
                   <CardUI card={card} height="100%" />
                   {isActive && (
                     <div className={styles.overlay}>
-                      {myHand[card] && <span className={styles.myCard} title="My hand">✅</span>}
+                      {handCards[card] && <span className={styles.myCard} title="My hand">✅</span>}
                     </div>
                   )}
                 </div>
@@ -91,7 +91,7 @@ export const Cards: FC = () => {
         );
       })}
 
-      <Counter chosenCards={chosenCards} chosenCardsNumber={chosenCardsNumber} />
+      <Counter chosenCards={chosenCards} handCards={handCards} />
     </div>
   );
 };
