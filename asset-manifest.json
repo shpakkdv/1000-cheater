@@ -1,11 +1,11 @@
 {
   "files": {
-    "main.css": "/1000-cheater/static/css/main.462e348e.css",
-    "main.js": "/1000-cheater/static/js/main.3fb978bd.js",
+    "main.css": "/1000-cheater/static/css/main.dda50962.css",
+    "main.js": "/1000-cheater/static/js/main.990dbd57.js",
     "index.html": "/1000-cheater/index.html"
   },
   "entrypoints": [
-    "static/css/main.462e348e.css",
-    "static/js/main.3fb978bd.js"
+    "static/css/main.dda50962.css",
+    "static/js/main.990dbd57.js"
   ]
 }
