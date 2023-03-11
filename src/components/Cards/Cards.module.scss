@@ -1,15 +1,6 @@
 .cardsCounter {
   font-weight: bold;
   margin-bottom: 10px;
-
-  @media screen and (max-width: 500px) {
-    font-size: 14px;
-  }
-
-  @media screen and (max-width: 360px) {
-    font-size: 12px;
-    margin-bottom: 5px;
-  }
 }
 
 .cards {
@@ -26,40 +17,99 @@
 }
 
 .card {
+  position: relative;
   height: 150px;
   margin: 5px;
   cursor: pointer;
 
-  &.active {
-    filter: sepia();
-  }
-
-  @media screen and (max-width: 740px) {
-    height: 125px;
-  }
-
-  @media screen and (max-width: 620px) {
-    height: 100px;
-  }
-
-  @media screen and (max-width: 500px) {
-    height: 80px;
-  }
-
-  @media screen and (max-width: 415px) {
-    height: 70px;
-  }
-
-  @media screen and (max-width: 360px) {
-    height: 65px;
-  }
-
-  @media screen and (max-width: 340px) {
-    height: 60px;
-  }
-
-  @media screen and (max-width: 318px) {
-    height: 55px;
+  &.active img {
+    opacity: 0.3;
   }
 }
 
+.overlay {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 5%;
+  display: flex;
+  justify-content: end;
+}
+
+.myCard {
+  padding: 2px 5px;
+  opacity: 0.6;
+}
+
+@media screen and (max-width: 740px) {
+  .card {
+    height: 125px;
+  }
+
+  .myCard {
+    font-size: 14px;
+    padding: 2px 4px;
+  }
+}
+
+@media screen and (max-width: 620px) {
+  .card {
+    height: 100px;
+  }
+
+  .myCard {
+    font-size: 12px;
+    padding: 1px 3px;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .cardsCounter {
+    font-size: 14px;
+  }
+
+  .card {
+    height: 80px;
+  }
+
+  .myCard {
+    font-size: 10px;
+    padding: 0 2px;
+  }
+}
+
+@media screen and (max-width: 415px) {
+  .card {
+    height: 70px;
+  }
+}
+
+@media screen and (max-width: 360px) {
+  .cardsCounter {
+    font-size: 12px;
+    margin-bottom: 5px;
+  }
+
+  .card {
+    height: 65px;
+  }
+}
+
+@media screen and (max-width: 340px) {
+  .card {
+    height: 60px;
+  }
+}
+
+@media screen and (max-width: 318px) {
+  .card {
+    height: 55px;
+  }
+
+  .myCard {
+    font-size: 8px;
+  }
+}

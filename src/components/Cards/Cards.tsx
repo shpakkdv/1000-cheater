@@ -14,6 +14,7 @@ const STORAGE_KEY = "CARDS__1000";
 export const Cards: FC = () => {
   const [chosenCards, setChosenCards] = useState<ChosenCards>({});
   const [chosenCardsNumber, setChosenCardsNumber] = useState(0);
+  const [myHand, setMyHand] = useState<ChosenCards>({});
 
   const onCardClick = useCallback((card: Card) => {
     if (chosenCards[card]) {
@@ -29,9 +30,17 @@ export const Cards: FC = () => {
     }
   }, [chosenCards]);
 
+  // Calculate chosen cards number
   useEffect(() => {
     setChosenCardsNumber(calculateChosenCardsNumber(chosenCards));
   }, [chosenCards]);
+
+  // Save the first 8 chosen cards as "my hand"
+  useEffect(() => {
+    if (chosenCardsNumber < 8) {
+      setMyHand({ ...chosenCards });
+    }
+  }, [chosenCardsNumber, chosenCards]);
 
   // Restore data after page loading
   useEffect(() => {
@@ -61,14 +70,20 @@ export const Cards: FC = () => {
           <div key={suit} className={styles.suit}>
             {RANKS.map((rank) => {
               const card = `${rank}${suit}` as const;
+              const isActive = chosenCards[card];
 
               return (
                 <div
                   key={rank}
-                  className={cn(styles.card, { [styles.active]: chosenCards[card] })}
+                  className={cn(styles.card, { [styles.active]: isActive })}
                   onClick={() => onCardClick(card)}
                 >
                   <CardUI card={card} height="100%" />
+                  {isActive && (
+                    <div className={styles.overlay}>
+                      {myHand[card] && <span className={styles.myCard} title="My hand">✅</span>}
+                    </div>
+                  )}
                 </div>
               );
             })}
