@@ -40,8 +40,10 @@
 }
 
 .myCard {
-  padding: 2px 5px;
+  padding: 4px 4px;
   opacity: 0.6;
+  font-size: 16px;
+  line-height: 16px;
 }
 
 @media screen and (max-width: 740px) {
@@ -51,7 +53,7 @@
 
   .myCard {
     font-size: 14px;
-    padding: 2px 4px;
+    line-height: 14px;
   }
 }
 
@@ -62,7 +64,8 @@
 
   .myCard {
     font-size: 12px;
-    padding: 1px 3px;
+    line-height: 12px;
+    padding: 3px 3px;
   }
 }
 
@@ -72,16 +75,40 @@
   }
 
   .card {
-    height: 80px;
+    height: 95px;
   }
 
   .myCard {
     font-size: 10px;
-    padding: 0 2px;
+    line-height: 10px;
   }
 }
 
-@media screen and (max-width: 415px) {
+@media screen and (max-width: 465px) {
+  .card {
+    height: 90px;
+  }
+}
+
+@media screen and (max-width: 445px) {
+  .card {
+    height: 85px;
+  }
+}
+
+@media screen and (max-width: 420px) {
+  .card {
+    height: 80px;
+  }
+}
+
+@media screen and (max-width: 405px) {
+  .card {
+    height: 75px;
+  }
+}
+
+@media screen and (max-width: 380px) {
   .card {
     height: 70px;
   }
@@ -111,5 +138,6 @@
 
   .myCard {
     font-size: 8px;
+    line-height: 8px;
   }
 }

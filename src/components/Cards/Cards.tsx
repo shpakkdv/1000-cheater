@@ -1,15 +1,20 @@
-import { type FC, useCallback, useEffect, useState } from 'react';
+import { type FC, useCallback, useEffect, useState } from "react";
 import cn from "classnames";
 // @ts-ignore TODO
 import CardUI from "react-free-playing-cards";
 
-import { RANKS, SUITS } from "const";
-import { Card, ChosenCards } from "types";
-import { Counter, calculateChosenCardsNumber } from "components/Counter";
+import { RANKS, SUITS, CARDS_STORAGE_KEY } from "const";
+import type { Card, ChosenCards } from "types";
+import { useLocalStorage } from "hooks";
+import { Counter } from "components/Counter";
+import { calculateChosenCardsNumber } from "./utils";
 
 import styles from './Cards.module.scss';
 
-const STORAGE_KEY = "CARDS__1000";
+interface CardsStorage {
+  chosenCards: ChosenCards;
+  myHand: ChosenCards;
+}
 
 export const Cards: FC = () => {
   const [chosenCards, setChosenCards] = useState<ChosenCards>({});
@@ -37,29 +42,24 @@ export const Cards: FC = () => {
 
   // Save the first 8 chosen cards as "my hand"
   useEffect(() => {
-    if (chosenCardsNumber < 8) {
+    if (calculateChosenCardsNumber(chosenCards) < 8) {
       setMyHand({ ...chosenCards });
     }
-  }, [chosenCardsNumber, chosenCards]);
+  }, [chosenCards]);
 
-  // Restore data after page loading
-  useEffect(() => {
-    // TODO: improve by storing more data there
-    const store = localStorage.getItem(STORAGE_KEY);
+  const restoreData = useCallback((storage: CardsStorage) => {
+    const { chosenCards, myHand } = storage;
 
-    if (store) {
-      try {
-        setChosenCards(JSON.parse(store));
-      } catch {
-        console.warn("Couldn't restore data.");
-      }
-    }
+    setChosenCards(chosenCards);
+    setMyHand(myHand);
   }, []);
 
-  // Set data to the storage when changed
-  useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(chosenCards));
-  }, [chosenCards]);
+  const cardsSettingsObject: CardsStorage = {
+    chosenCards,
+    myHand,
+  };
+
+  useLocalStorage(restoreData, cardsSettingsObject, CARDS_STORAGE_KEY);
 
   return (
     <div className={styles.cards}>

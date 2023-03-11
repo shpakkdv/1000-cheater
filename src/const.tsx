@@ -34,3 +34,7 @@ export const SuitValue: Record<ExpandedSuit, number> = {
   c: 60,
   s: 40,
 };
+
+const STORAGE_KEY_PREFIX = "___1000-cheater___.";
+export const CARDS_STORAGE_KEY = `${STORAGE_KEY_PREFIX}CARDS`;
+export const SETTINGS_STORAGE_KEY = `${STORAGE_KEY_PREFIX}SETTINGS`;

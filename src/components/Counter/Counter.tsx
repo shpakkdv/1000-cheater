@@ -1,6 +1,7 @@
-import { FC, useCallback, useEffect, useState } from "react";
+import { type FC, useCallback, useEffect, useState } from "react";
 
-import { RANKS, SUITS, EmojiBySuit } from "const";
+import { RANKS, SUITS, EmojiBySuit, SETTINGS_STORAGE_KEY } from "const";
+import { useLocalStorage } from "hooks";
 import type { Card, ChosenCards, Rank, Suit } from "types";
 import { calculateMinimumPossiblePoints } from "./utils";
 
@@ -11,12 +12,20 @@ type CheckedSuits = Partial<Record<Suit, [player1: boolean, player2: boolean, di
 const PlayerKeys = ["pl1", "pl2"] as const;
 type PlayerKey = typeof PlayerKeys[number];
 
-const DefaultPlayerNameByKey: Record<PlayerKey, string> = {
+type PlayerNames = Record<PlayerKey, string>;
+
+const DefaultPlayerNameByKey: PlayerNames = {
   "pl1": "Player 1",
   "pl2": "Player 2",
 };
 
 const DefaultCounterText = "Choose at least 7 cards."
+
+interface SettingsStorage {
+  checkedSuits: CheckedSuits;
+  playerNames: PlayerNames;
+  minimumPossiblePoints: string;
+}
 
 interface CounterProps {
   chosenCards: ChosenCards;
@@ -25,7 +34,7 @@ interface CounterProps {
 
 export const Counter: FC<CounterProps> = ({ chosenCards, chosenCardsNumber }) => {
   const [checkedSuits, setCheckedSuits] = useState<CheckedSuits>({});
-  const [playerNames, setPlayerName] = useState<Record<PlayerKey, string>>(DefaultPlayerNameByKey);
+  const [playerNames, setPlayerName] = useState<PlayerNames>(DefaultPlayerNameByKey);
   const [activeInput, setActiveInput] = useState<PlayerKey | null>(null);
   const [minimumPossiblePoints, setMinimumPossiblePoints] = useState(DefaultCounterText);
 
@@ -121,6 +130,23 @@ export const Counter: FC<CounterProps> = ({ chosenCards, chosenCardsNumber }) =>
     // the calculation is correct only for 7 and 8 cards
     setMinimumPossiblePoints(calculateMinimumPossiblePoints(chosenCards));
   }, [chosenCards, chosenCardsNumber]);
+
+
+  const restoreData = useCallback((storage: SettingsStorage) => {
+    const { playerNames, checkedSuits, minimumPossiblePoints } = storage;
+
+    setPlayerName(playerNames);
+    setCheckedSuits(checkedSuits);
+    setMinimumPossiblePoints(minimumPossiblePoints);
+  }, []);
+
+  const storageSettingsObject: SettingsStorage = {
+    playerNames,
+    checkedSuits,
+    minimumPossiblePoints,
+  };
+
+  useLocalStorage(restoreData, storageSettingsObject, SETTINGS_STORAGE_KEY);
 
   return (
     <div className={styles.counter}>
