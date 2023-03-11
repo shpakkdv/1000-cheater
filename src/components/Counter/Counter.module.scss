@@ -1,0 +1,67 @@
+.counter {
+  display: flex;
+  align-items: center;
+}
+
+.player {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.name {
+  display: flex;
+  align-items: center;
+  height: 27px;
+  width: 87px;
+  box-sizing: border-box;
+  margin-right: 15px;
+  padding: 2px 4px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.total {
+  margin-left: 20px;
+}
+
+.checkboxContainer {
+  input {
+    margin: 0;
+    cursor: pointer;
+  }
+}
+
+.suitLabel {
+  padding: 0 12px 0 7px;
+  margin-right: 7px;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 740px) {
+  .counter {
+    flex-direction: column;
+  }
+
+  .total {
+    margin: 20px 0 0 0;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .counter, .name {
+    font-size: 14px;
+  }
+
+  .name {
+    width: 80px;
+    margin-right: 10px;
+  }
+}
+
+@media screen and (max-width: 360px) {
+  .counter, .name {
+    font-size: 12px;
+  }
+}

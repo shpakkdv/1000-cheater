@@ -1,19 +1,19 @@
-import { FC, useCallback, useEffect, useState } from 'react';
+import { type FC, useCallback, useEffect, useState } from 'react';
 import cn from "classnames";
 // @ts-ignore TODO
 import CardUI from "react-free-playing-cards";
+
+import { RANKS, SUITS } from "const";
+import { Card, ChosenCards } from "types";
+import { Counter, calculateChosenCardsNumber } from "components/Counter";
 
 import styles from './Cards.module.scss';
 
 const STORAGE_KEY = "CARDS__1000";
 
-const ranks = ["9", "J", "Q", "K", "T", "A"] as const;
-const suits = ["h", "d", "c", "s"] as const;
-
-type Card = `${typeof ranks[number]}${typeof suits[number]}`;
-
 export const Cards: FC = () => {
-  const [chosenCards, setChosenCards] = useState<Partial<Record<Card, boolean>>>({});
+  const [chosenCards, setChosenCards] = useState<ChosenCards>({});
+  const [chosenCardsNumber, setChosenCardsNumber] = useState(0);
 
   const onCardClick = useCallback((card: Card) => {
     if (chosenCards[card]) {
@@ -29,8 +29,13 @@ export const Cards: FC = () => {
     }
   }, [chosenCards]);
 
+  useEffect(() => {
+    setChosenCardsNumber(calculateChosenCardsNumber(chosenCards));
+  }, [chosenCards]);
+
   // Restore data after page loading
   useEffect(() => {
+    // TODO: improve by storing more data there
     const store = localStorage.getItem(STORAGE_KEY);
 
     if (store) {
@@ -49,10 +54,12 @@ export const Cards: FC = () => {
 
   return (
     <div className={styles.cards}>
-      {suits.map((suit, index) => {
+      <div className={styles.cardsCounter}>{chosenCardsNumber} / 24</div>
+
+      {SUITS.map((suit) => {
         return (
           <div key={suit} className={styles.suit}>
-            {ranks.map((rank) => {
+            {RANKS.map((rank) => {
               const card = `${rank}${suit}` as const;
 
               return (
@@ -68,6 +75,8 @@ export const Cards: FC = () => {
           </div>
         );
       })}
+
+      <Counter chosenCards={chosenCards} chosenCardsNumber={chosenCardsNumber} />
     </div>
   );
 };
